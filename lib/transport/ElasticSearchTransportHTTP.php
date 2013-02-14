@@ -330,14 +330,15 @@ class ElasticSearchTransportHTTP extends ElasticSearchTransport
 		curl_setopt($conn, CURLOPT_URL, $requestURL);
 		curl_setopt($conn, CURLOPT_TIMEOUT, $this->timeout);
 		curl_setopt($conn, CURLOPT_PORT, $this->port);
-		curl_setopt($conn, CURLOPT_RETURNTRANSFER, 1) ;
+		curl_setopt($conn, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($conn, CURLOPT_CUSTOMREQUEST, strtoupper($method));
-		curl_setopt($conn, CURLOPT_FORBID_REUSE , 0) ;
+		curl_setopt($conn, CURLOPT_FORBID_REUSE , 0);
 
-		if (is_array($payload) && count($payload) > 0) {
-			$doc = json_encode($payload);
-			curl_setopt($conn, CURLOPT_POSTFIELDS, $doc) ;
-		}
+        if (is_array($payload) && count($payload) > 0) {
+            curl_setopt($conn, CURLOPT_POSTFIELDS, json_encode($payload));
+        } else if (is_string($payload)) {
+            curl_setopt($conn, CURLOPT_POSTFIELDS, $payload);
+        }
 
 		$data = curl_exec($conn);
 

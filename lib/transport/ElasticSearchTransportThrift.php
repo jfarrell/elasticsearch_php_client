@@ -337,9 +337,11 @@ class ElasticSearchTransportThrift extends ElasticSearchTransport
 			'parameters' => $params,
 		);
 
-		if (is_array($payload) && count($payload) > 0) {
-			$req["body"] = json_encode($payload);
-		}
+        if (is_array($payload) && count($payload) > 0) {
+            $req["body"] = json_encode($payload);
+        } else if (is_string($payload)) {
+            $req["body"] = $payload;
+        }
 
 		$result = $this->client->execute(new RestRequest($req));
 

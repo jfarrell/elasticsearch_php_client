@@ -97,7 +97,11 @@ class ElasticSearchClient
 
 		$response = $this->transport->request($path, $method, $payload);
 
-		return ($verbose) ? $response : $response['_source'];
+        if (array_key_exists('_source', $response)) {
+          return ($verbose) ? $response : $response['_source'];
+        } else {
+          return $response;
+        }
 	}
 
 	/**

@@ -189,12 +189,14 @@ class ElasticSearchTransportMemcached extends ElasticSearchTransport
 		$conn = curl_init();
 		curl_setopt($conn, CURLOPT_URL, "http://" . $this->host . $url);
 		curl_setopt($conn, CURLOPT_PORT, $this->port);
-		curl_setopt($conn, CURLOPT_RETURNTRANSFER, 1) ;
+		curl_setopt($conn, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($conn, CURLOPT_CUSTOMREQUEST, strtoupper($method));
 
-		if (is_array($payload) && count($payload) > 0) {
-			curl_setopt($conn, CURLOPT_POSTFIELDS, json_encode($payload));
-		}
+        if (is_array($payload) && count($payload) > 0) {
+            curl_setopt($conn, CURLOPT_POSTFIELDS, json_encode($payload));
+        } else if (is_string($payload)) {
+            curl_setopt($conn, CURLOPT_POSTFIELDS, $payload);
+        }
 
 		$data = curl_exec($conn);
 		if ($data !== false) {
